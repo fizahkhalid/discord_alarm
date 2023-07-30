@@ -1,8 +1,8 @@
-import os
 import json
 import requests
-import configparser
-import streamlit as st
+from dateutil import parser
+import base64
+
 
 def get_messages(channel_id,authorization_key):
     headers = {
@@ -13,13 +13,20 @@ def get_messages(channel_id,authorization_key):
     json_objects = json.loads(r.text)
     return json_objects
 
-#'2023-07-11T09:00:38.346000+00:00'
+def format_timestamp(timestamp):
+    # Convert timestamp to a more readable format
+    datetime_obj = parser.parse(timestamp)
+    formatted_timestamp_date = datetime_obj.strftime('%d-%m-%Y')  # Ensure the seconds fraction has three digits
+    formatted_timestamp_time = datetime_obj.strftime('%H:%M')  # Ensure the seconds fraction has three digits
+    return formatted_timestamp_date,formatted_timestamp_time
 
-def raise_alarm(duration):
-    import os
-    os.system('play -nq -t alsa synth {} sine {}'.format(duration, 760))
-
-def get_credentials():
-    username = st.secrets['CREDENTIALS']['Username']
-    password = st.secrets['CREDENTIALS']['Password']
-    return username, password
+def autoplay_audio(file_path,format):
+    with open(file_path, "rb") as f:
+        data = f.read()
+        b64 = base64.b64encode(data).decode()
+        md = f"""
+            <audio autoplay="true">
+            <source src="data:{format};base64,{b64}" type={format}>
+            </audio>
+            """
+        return md

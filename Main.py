@@ -1,47 +1,12 @@
-import streamlit as st
 import time
-from utils import get_credentials,get_messages
-from datetime import datetime
-from dateutil import parser
-import base64
+import streamlit as st
+from utils import get_messages,autoplay_audio
+from st_utils import get_credentials,display_message,footer
 
-# Footer text
-# st.footer("Developed by: Fizah Khalid | [LinkedIn Profile](https://www.linkedin.com/in/fizahkhalid/)")
+st.set_page_config(
+    page_title='Discord Alarm',page_icon="⏰",layout='wide',initial_sidebar_state='auto')
 
-custom_footer = """
-<div style="text-align: center;">
-    <p>Developed by: Fizah Khalid | <a href="https://www.linkedin.com/in/fizahkhalid/" target="_blank">LinkedIn Profile</a></p>
-</div>
-"""
-
-hide_streamlit_style = """
-<style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-</style>
-"""
-st.markdown(hide_streamlit_style + custom_footer, unsafe_allow_html=True)
-
-def format_timestamp(timestamp):
-    # Convert timestamp to a more readable format
-    datetime_obj = parser.parse(timestamp)
-    formatted_timestamp_date = datetime_obj.strftime('%d-%m-%Y')  # Ensure the seconds fraction has three digits
-    formatted_timestamp_time = datetime_obj.strftime('%H:%M')  # Ensure the seconds fraction has three digits
-    
-    return formatted_timestamp_date,formatted_timestamp_time
-
-def display_message(message,expand=False):
-    text = message['content']
-    author = message['author']['username']
-    attachments = [element['url'] for element in message['attachments'] if element['content_type'].startswith("image")]
-    date_str,time_str = format_timestamp(message['timestamp'])
-
-    # Message layout
-    with st.expander(f"Posted by {author} - at: {time_str} | {date_str}",expanded=expand):
-        st.write(f"**{author}** said:")
-        st.info(text)
-        if len(attachments):
-            st.image(attachments, width=400, caption=f"Posted by {author}")
+footer()
 
 choice = st.sidebar.radio('Select Discord Account',options=['default','custom'],horizontal=True)
 st.sidebar.divider()
@@ -87,7 +52,7 @@ if st.session_state['logged_in'] and choice=="default":
         CHANNEL_ID = channel_id_input
     else:
         CHANNEL_ID = st.secrets['CHANNEL_ID']['channel_id']
-        
+
 elif st.session_state['authorization'] and choice=="custom":
     if channel_id_input:
         CHANNEL_ID = channel_id_input
@@ -103,17 +68,6 @@ st.sidebar.divider()
 alarms = {
     'Frédéric Chopin':{"path":'alarms/Muriel-Nguyen-Xuan-Chopin-valse-opus64-1.ogg',"format":'audio/ogg'}
 }
-
-def autoplay_audio(file_path,format):
-    with open(file_path, "rb") as f:
-        data = f.read()
-        b64 = base64.b64encode(data).decode()
-        md = f"""
-            <audio autoplay="true">
-            <source src="data:{format};base64,{b64}" type={format}>
-            </audio>
-            """
-        return md
     
 # Sidebar settings button
 with st.sidebar.expander('# Settings', expanded=False):
@@ -189,5 +143,3 @@ if CHANNEL_ID and option1 and PROCEED:
         time.sleep(sleep_duration)
 if not option1:
     st.warning("REAL TIME MONITORING STOPPED !")
-                
-
