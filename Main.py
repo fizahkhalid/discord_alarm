@@ -8,13 +8,19 @@ import base64
 # Footer text
 # st.footer("Developed by: Fizah Khalid | [LinkedIn Profile](https://www.linkedin.com/in/fizahkhalid/)")
 
+custom_footer = """
+<div style="text-align: center;">
+    <p>Developed by: Fizah Khalid | <a href="https://www.linkedin.com/in/fizahkhalid/" target="_blank">LinkedIn Profile</a></p>
+</div>
+"""
+
 hide_streamlit_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style>
+"""
+st.markdown(hide_streamlit_style + custom_footer, unsafe_allow_html=True)
 
 def format_timestamp(timestamp):
     # Convert timestamp to a more readable format
