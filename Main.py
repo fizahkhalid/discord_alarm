@@ -117,7 +117,7 @@ with st.sidebar.expander('# Settings', expanded=False):
 
 
         # st.audio(audio_bytes,format=alarms[option2]['format'])
-
+PROCEED=False
 if CHANNEL_ID:
     st.header("Messages")
     messages = get_messages(channel_id=CHANNEL_ID,authorization_key=authorization_key)
@@ -132,9 +132,15 @@ if CHANNEL_ID:
                 index+=1
         else:
             last_message=None
+        PROCEED = True
     else:
         last_message = None
         st.error("Messages are not being Populated !")
+        test_messages = get_messages(CHANNEL_ID,authorization_key)
+        if 'code' in test_messages.keys():
+            PROCEED = False
+            st.error("Retrieving Messaged Returned Error Code: ",messages['code'])
+
 
     st.divider()
     if last_message:
@@ -149,7 +155,7 @@ if CHANNEL_ID:
 else:
     st.info("Please Enter a Channel ID to Proceed")
 
-if CHANNEL_ID and option1:
+if CHANNEL_ID and option1 and PROCEED:
     while True:
         messages = get_messages(channel_id=CHANNEL_ID,authorization_key=authorization_key)
         if last_message_content == messages[0]['content'] and last_message_time == messages[0]['timestamp']:
