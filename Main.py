@@ -5,6 +5,9 @@ from datetime import datetime
 from dateutil import parser
 import base64
 
+# Footer text
+st.footer("Developed by: Fizah Khalid | [LinkedIn Profile](https://www.linkedin.com/in/fizahkhalid/)")
+
 
 def format_timestamp(timestamp):
     # Convert timestamp to a more readable format
@@ -174,3 +177,4 @@ if CHANNEL_ID and option1 and PROCEED:
 if not option1:
     st.warning("REAL TIME MONITORING STOPPED !")
                 
+
