@@ -132,6 +132,9 @@ if CHANNEL_ID:
                 index+=1
         else:
             last_message=None
+    else:
+        last_message = None
+        st.error("Messages are not being Populated !")
 
     st.divider()
     if last_message:
@@ -143,6 +146,8 @@ if CHANNEL_ID:
     else:
         last_message_content = None
         last_message_time = None
+else:
+    st.info("Please Enter a Channel ID to Proceed")
 
 if CHANNEL_ID and option1:
     while True:
