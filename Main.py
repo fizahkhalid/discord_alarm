@@ -175,17 +175,22 @@ if STAGE_THREE:
 if STAGE_THREE and TEST_PASSED and real_time_monitoring:
     while True:
         messages = get_messages(channel_id=CHANNEL_ID,authorization_key=authorization_key)
-        if last_message_content == messages[0]['content'] and last_message_time == messages[0]['timestamp']:
-            st.session_state['alarm_state']='not running'
-            continue
+        if type(messages)==list:
+            if last_message_content == messages[0]['content'] and last_message_time == messages[0]['timestamp']:
+                st.session_state['alarm_state']='not running'
+                continue
+            else:
+                new_message = messages[0]
+                st.header("New Message Recieved !")
+                display_message(new_message,expand=True)
+                last_message_content = new_message['content']
+                last_message_time = new_message['timestamp']
+                sound_md = autoplay_audio(alarms[alarm_choice]['path'],alarms[alarm_choice]['format'])
+                st.markdown(sound_md,unsafe_allow_html=True)
         else:
-            new_message = messages[0]
-            st.header("New Message Recieved !")
-            display_message(new_message,expand=True)
-            last_message_content = new_message['content']
-            last_message_time = new_message['timestamp']
-            sound_md = autoplay_audio(alarms[alarm_choice]['path'],alarms[alarm_choice]['format'])
-            st.markdown(sound_md,unsafe_allow_html=True)
+            TEST_PASSED = False
+            st.error(f"Messages not retrieved with status code {messages['code']} \n Please Check the **Channel ID** or **Authorization Key**")
 
+        
         time.sleep(sleep_duration)
 
