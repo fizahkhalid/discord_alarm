@@ -6,8 +6,15 @@ from dateutil import parser
 import base64
 
 # Footer text
-st.footer("Developed by: Fizah Khalid | [LinkedIn Profile](https://www.linkedin.com/in/fizahkhalid/)")
+# st.footer("Developed by: Fizah Khalid | [LinkedIn Profile](https://www.linkedin.com/in/fizahkhalid/)")
 
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 def format_timestamp(timestamp):
     # Convert timestamp to a more readable format
