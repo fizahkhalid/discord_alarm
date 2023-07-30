@@ -6,6 +6,7 @@ from st_utils import get_credentials,display_message,footer
 st.set_page_config(
     page_title='Discord Alarm',page_icon="⏰",layout='wide',initial_sidebar_state='auto')
 
+
 # DISPLAY FOOTER
 footer()
 
@@ -55,13 +56,6 @@ STAGE_TWO = False
 if st.session_state['logged_in'] or st.session_state['authorization']:
     STAGE_TWO = True
 
-if STAGE_TWO:
-    st.title("Real Time Discord Alarm with Messages")
-    st.divider()
-    channel_id_message = "Channel ID [Optional]" if st.session_state['logged_in'] else "Channel ID"
-    channel_id_input = st.sidebar.text_input(channel_id_message)
-    st.sidebar.divider()
-
 alarms = {
     'Frédéric Chopin':{"path":'alarms/Muriel-Nguyen-Xuan-Chopin-valse-opus64-1.ogg',"format":'audio/ogg'}
 }
@@ -81,7 +75,30 @@ with st.sidebar.expander('# Settings', expanded=False):
         else:
             sound_md = st.empty()
             st.session_state['sound_alarm_in_settings']=False
+if STAGE_TWO:
+    st.title("Real Time Discord Alarm with Messages")
+    if real_time_monitoring:
+        # Custom colored bar (Green)
+        custom_colored_bar = """
+        <div style="height: 10px; background-color: #4CAF50;"></div>
+        """
 
+        # Display the custom colored bar (Green)
+        st.markdown(custom_colored_bar, unsafe_allow_html=True)
+    else:
+        # Custom colored bar (Green)
+        custom_colored_bar = """
+        <div style="height: 10px; background-color: #FF0000;"></div>
+        """
+
+        # Display the custom colored bar (Green)
+        st.markdown(custom_colored_bar, unsafe_allow_html=True)
+        st.write("")
+        st.warning("REAL TIME MONITORING STOPPED !")
+    st.divider()
+    channel_id_message = "Channel ID [Optional]" if st.session_state['logged_in'] else "Channel ID"
+    channel_id_input = st.sidebar.text_input(channel_id_message)
+    st.sidebar.divider()
 
 CHANNEL_ID=None
 if st.session_state['logged_in']:
@@ -171,11 +188,4 @@ if STAGE_THREE and TEST_PASSED and real_time_monitoring:
             st.markdown(sound_md,unsafe_allow_html=True)
 
         time.sleep(sleep_duration)
-
-if not real_time_monitoring:
-    st.warning("REAL TIME MONITORING STOPPED !")
-
-
-
-
 
