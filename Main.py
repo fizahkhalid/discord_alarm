@@ -98,7 +98,6 @@ def autoplay_audio(file_path,format):
             </audio>
             """
         return md
-
     
 # Sidebar settings button
 with st.sidebar.expander('# Settings', expanded=False):
