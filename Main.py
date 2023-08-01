@@ -189,7 +189,7 @@ if STAGE_THREE and TEST_PASSED and real_time_monitoring:
                 st.markdown(sound_md,unsafe_allow_html=True)
         else:
             TEST_PASSED = False
-            st.error(f"Messages not retrieved with status code {messages['code']} \n Please Check the **Channel ID** or **Authorization Key**")
+            st.error(f"Messages not retrieved with status code {messages} \n Please Check the **Channel ID** or **Authorization Key**")
 
         
         time.sleep(sleep_duration)
